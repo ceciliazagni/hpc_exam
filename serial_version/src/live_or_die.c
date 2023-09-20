@@ -2,6 +2,17 @@
 #include <stdbool.h>
 
 #include "live_or_die.h"
+/*
+ *     live_or_die():  check if a cell should live or die in the next generation of the playground.
+ *     @param
+ *     k * k:      size of the playground
+ *     i * k + j:  index of the cell to check
+ *     grid:       pointer to the playground
+ *     @return
+ *     1: the cell should live
+ *     0: the cell should die
+ */
+
 
 bool live_or_die(unsigned const int k,  unsigned const long i, unsigned const char *grid) {
 	//printf("check if cell %lu live_or_die in the next generation\n", i);
@@ -13,7 +24,7 @@ bool live_or_die(unsigned const int k,  unsigned const long i, unsigned const ch
 	for (int dx = -1; dx <= 1; dx++) {
 		for (int dy = -1; dy <= 1; dy++) {
 			if (dx == 0 && dy == 0) continue; // Skip the current cell
-			if (grid[(row+dx)*k + (col+dy)] > 0)
+			if (grid[(k+row+dx)%k*k + (k+col+dy)%k] > 0)
 				countalive++;
 		}
 	}

@@ -33,8 +33,6 @@
  */
 
 void ordered_evolution(const char *fname, unsigned int k, unsigned const int n, unsigned const int s) {
-	printf("ordered evolution\n");
-	/*
 	unsigned char *grid; 
 
 	unsigned int value;
@@ -61,6 +59,5 @@ void ordered_evolution(const char *fname, unsigned int k, unsigned const int n, 
 	write_pgm_image((void*) grid, *maxvalue, k, k, filename);
 	free(filename);		
 	free(grid);
-	 */
 	return;
 }

@@ -5,7 +5,7 @@
 #include<omp.h>
 #include<mpi.h>
 
-#include "ordered_evolution.h"
+#include "static_evolution.h"
 #include "read_write_pgm_image.h"
 #include "live_or_die.h"
 
@@ -24,7 +24,7 @@
 #define DEAD 0
 
 /*
- *     ordered_evolution():   performs the static evolution of the playground
+ *     static_evolution():   performs the static evolution of the playground
  *     @param
  *     fname:  name of the file containing the initial state of the playground
  *     k:      size of the squre matrix that's going to rapresent the playground
@@ -32,22 +32,27 @@
  *     s:      every how many generations save a snapshot
  */
 
-void ordered_evolution(const char *fname, unsigned int k, unsigned const int n, unsigned const int s) {
-	printf("ordered evolution\n");
-	/*
+void static_evolution(const char *fname, unsigned int k, unsigned const int n, unsigned const int s) {
 	unsigned char *grid; 
+	unsigned char *next_grid;
+	unsigned char *tmp;
 
 	unsigned int value;
 	unsigned int *maxvalue = &value;
 
-	int i;
-
 	read_pgm_image((void**) &grid, maxvalue, &k, &k, fname);
 	
-	for (unsigned int t = 1; t < n+1; t++) {
-		i = t % (k*k) - 1;
-		//printf("calcolo lo stato della cella %u.\n",i);
-		grid[i] = (live_or_die(k, i, grid)) ? *maxvalue : 0;
+	next_grid = malloc(k*k*sizeof(char));
+
+	for (unsigned int t = 0; t < n; t++){
+		//printf("t == %u\n",t);
+		for (unsigned long i = 0; i < k*k; i++){
+			//printf("calcolo la cella %lu di next_grid.\n",i);
+			next_grid[i] = (live_or_die(k, i, grid)) ? *maxvalue : 0;
+		}
+		tmp = grid;
+		grid = next_grid;
+		next_grid = tmp;
 		if (s==0) continue;
 		if (t%s == 0) {
 			char *snapname = malloc(26*sizeof(char));
@@ -60,7 +65,7 @@ void ordered_evolution(const char *fname, unsigned int k, unsigned const int n, 
 	sprintf(filename, "game_of_life_END.pgm");
 	write_pgm_image((void*) grid, *maxvalue, k, k, filename);
 	free(filename);		
+	free(next_grid);
 	free(grid);
-	 */
 	return;
 }
