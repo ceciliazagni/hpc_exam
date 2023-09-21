@@ -7,16 +7,6 @@
 #include "run.h"
 #include "static_evolution.h"
 #include "ordered_evolution.h"
-// For measuring time
-#if defined(_OPENMP)
-    #define CPU_TIME ({struct  timespec ts; clock_gettime( CLOCK_REALTIME, &ts ),\
-		    	    (double)ts.tv_sec + (double)ts.tv_nsec * 1e-9;})
-    #define CPU_TIME_th ({struct  timespec myts; clock_gettime( CLOCK_THREAD_CPUTIME_ID, &myts ),\
-		    	    (double)myts.tv_sec + (double)myts.tv_nsec * 1e-9;})
-#else
-#define CPU_TIME ({struct  timespec ts; clock_gettime( CLOCK_PROCESS_CPUTIME_ID, &ts ),\
-		    (double)ts.tv_sec + (double)ts.tv_nsec * 1e-9;})
-#endif
 
 #define ALIVE 255
 #define DEAD 0
@@ -33,15 +23,24 @@
  */
 
 void run(const char *fname, unsigned const int k, unsigned const int n, unsigned const int s, const char e) {
+	
+	int size, rank;
+	MPI_Comm_size(MPI_COMM_WORLD, &size);
+	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+	
 	if ( e == 0 ) {
-		printf("Ordered evolution.\n");
+		//if (rank == 0)
+		//	printf("Ordered evolution.\n");
 		ordered_evolution(fname,k,n,s);
 		return;
 	} else {
-		printf("Static evolution.\n");
+		//if (rank == 0)
+		//	printf("Static evolution.\n");
 		static_evolution(fname,k,n,s);
 		return;	
 	}
+
+
 	return;
 }
 

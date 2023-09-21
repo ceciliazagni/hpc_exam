@@ -1,9 +1,11 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
+#include <math.h>
+#include <omp.h>
+#include <mpi.h>
 #include <stdbool.h>
-#include<time.h>
-#include<omp.h>
-#include<mpi.h>
 
 #include "static_evolution.h"
 #include "read_write_pgm_image.h"
@@ -12,12 +14,12 @@
 // For measuring time
 #if defined(_OPENMP)
     #define CPU_TIME ({struct  timespec ts; clock_gettime( CLOCK_REALTIME, &ts ),\
-		    	    (double)ts.tv_sec + (double)ts.tv_nsec * 1e-9;})
+		    		    	    (double)ts.tv_sec + (double)ts.tv_nsec * 1e-9;})
     #define CPU_TIME_th ({struct  timespec myts; clock_gettime( CLOCK_THREAD_CPUTIME_ID, &myts ),\
-		    	    (double)myts.tv_sec + (double)myts.tv_nsec * 1e-9;})
+		    		    	    (double)myts.tv_sec + (double)myts.tv_nsec * 1e-9;})
 #else
 #define CPU_TIME ({struct  timespec ts; clock_gettime( CLOCK_PROCESS_CPUTIME_ID, &ts ),\
-		    (double)ts.tv_sec + (double)ts.tv_nsec * 1e-9;})
+				    (double)ts.tv_sec + (double)ts.tv_nsec * 1e-9;})
 #endif
 
 #define ALIVE 255
@@ -49,7 +51,9 @@ void static_evolution(const char *fname, unsigned int k, unsigned const int n, u
 	
 	//printf("I'm %d e devo leggere l'header\n",rank);
 
-	
+	// timing
+	double tstart = CPU_TIME;
+
 	read_pgm_image_header(maxvalue, &k, &k, fname, &offset);
 	//adesso so quanto e' grande header, quanto e' grande k e posso fare mpi io
 
@@ -88,11 +92,11 @@ void static_evolution(const char *fname, unsigned int k, unsigned const int n, u
 		// send up		
 		MPI_Sendrecv(grid+k, k, MPI_CHAR, rank_sopra, up, grid+(n_rows+1)*k, k, MPI_CHAR, rank_sotto, up, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 	
-		//printf("FINO QUA TUTTO OK\n");
+		//printf("FINO QUA TUTTO OK 1\n");
 	
 		MPI_Barrier(MPI_COMM_WORLD);
 
-		
+		/*
 		// printo la griglia a terminale
 		printf("t = %d, I'm rank %d e leggo:", t, rank);
 		for (int i = k; i < (n_rows+1)*k; i++) {
@@ -101,8 +105,9 @@ void static_evolution(const char *fname, unsigned int k, unsigned const int n, u
 			printf("%d ", grid[i] == ALIVE ? 1 : 0);
 		}
 		printf("\n");
-
+*/
 		// calcolo la prossima generazione
+#pragma omp parallel for schedule(static)
 		for (int i = k; i < (n_rows+1)*k; i++) {
 			// controllo gli 8 vicini
 			int countalive = 0;
@@ -148,6 +153,7 @@ void static_evolution(const char *fname, unsigned int k, unsigned const int n, u
 		}
 	}
 
+	/*
 	// printo il risultato finale
 	printf("t = %d, I'm rank %d e leggo:", n, rank);
 	for (int i = k; i < (n_rows+1)*k; i++) {
@@ -156,11 +162,13 @@ void static_evolution(const char *fname, unsigned int k, unsigned const int n, u
 		printf("%d ", grid[i] == ALIVE ? 1 : 0);
 	}
 	printf("\n");
-
+*/
 
 	// salvo il risultato in un file pgm
-	char *filename = malloc (21*sizeof(char));
-	sprintf(filename, "game_of_life_END.pgm");
+	int len = strlen(fname);
+	char *filename = malloc((len + strlen("_END") + 1)*sizeof(char));
+	strcpy(filename, fname);
+	strcpy(filename + len - strlen(".pgm"), "_END.pgm");
 	
 	//MPI_Offset current_position = -1;
 	
@@ -177,7 +185,11 @@ void static_evolution(const char *fname, unsigned int k, unsigned const int n, u
 
 	write_pgm_image_body(grid+k, ALIVE, n_rows*k*sizeof(char), &current_position, filename);
 		
-	printf("FINO QUA TUTTO OK\n");
+	double tend = CPU_TIME;
+	if ( rank == 0)
+		printf("%f",tend-tstart);
+	
+	//printf("FINO QUA TUTTO OK\n");
 
 	free(filename);
 	free(next_grid);

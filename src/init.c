@@ -10,12 +10,12 @@
 // For measuring time
 #if defined(_OPENMP)
     #define CPU_TIME ({struct  timespec ts; clock_gettime( CLOCK_REALTIME, &ts ),\
-		    	    (double)ts.tv_sec + (double)ts.tv_nsec * 1e-9;})
+		                                                (double)ts.tv_sec + (double)ts.tv_nsec * 1e-9;})
     #define CPU_TIME_th ({struct  timespec myts; clock_gettime( CLOCK_THREAD_CPUTIME_ID, &myts ),\
-		    	    (double)myts.tv_sec + (double)myts.tv_nsec * 1e-9;})
+		                                                (double)myts.tv_sec + (double)myts.tv_nsec * 1e-9;})
 #else
 #define CPU_TIME ({struct  timespec ts; clock_gettime( CLOCK_PROCESS_CPUTIME_ID, &ts ),\
-		    (double)ts.tv_sec + (double)ts.tv_nsec * 1e-9;})
+		                                    (double)ts.tv_sec + (double)ts.tv_nsec * 1e-9;})
 #endif
 
 #define ALIVE 255
@@ -29,6 +29,9 @@
  */
 void init(const char *fname, unsigned const int k, const int rank, const int size) {	
 	int n, r;
+
+	// timing
+	double tstart = CPU_TIME;
 
 	MPI_Barrier(MPI_COMM_WORLD);
 
@@ -71,6 +74,10 @@ void init(const char *fname, unsigned const int k, const int rank, const int siz
 	//printf("I'm %d, ho scritto\n",rank);
 
 	free(grid);
+
+	double tend = CPU_TIME;
+	if ( rank == 0)
+		printf("%f",tend-tstart);
 
 	return; 
 }

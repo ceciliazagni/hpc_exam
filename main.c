@@ -71,13 +71,19 @@ int main(int argc, char *argv[]) {
 	
 	// initialize MPI
 	int rank, size;	        
-	MPI_Init(&argc, &argv);
+	//MPI_Init(&argc, &argv);
+	int mpi_provided_thread_level;
+	MPI_Init_thread(NULL, NULL, MPI_THREAD_FUNNELED, &mpi_provided_thread_level);
+	if (mpi_provided_thread_level < MPI_THREAD_FUNNELED)
+		printf("[WARNING] mpi thread support is lower than demanded\n");
+	
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 	MPI_Comm_size(MPI_COMM_WORLD, &size);
 
     	// do what the user asked for:
 	if (action == INIT) {
-    		printf("Initializing a new playground...\n");
+		//if ( rank == 0 )
+		//	printf("Initializing a new playground...\n");
     		init(fname, k, rank, size);
     	}
     	if (action == RUN) {
@@ -86,7 +92,8 @@ int main(int argc, char *argv[]) {
 			printf("-e 0 means ordered evolution, -e 1 means static evolution\n");
 			return 0;
 		}
-    		printf("Running the provided payground...\n");
+		//if ( rank == 0 )
+		//	printf("Running the provided payground...\n");
     		run(fname, k, n, s, e);
 	}
 	
