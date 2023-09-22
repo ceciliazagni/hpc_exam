@@ -1,0 +1,2 @@
+-np 1 -x UCX_RNDV_THRESH=1 -x UCX_NET_DEVICES=mlx5_1 --bind-to none --hostfile hostfiles/hostfile1 taskset -c 48 ./spp.x -g 0 -p 32
+-np 1 -x UCX_RNDV_THRESH=1 -x UCX_NET_DEVICES=mlx5_1 --bind-to none --hostfile hostfiles/hostfile2 taskset -c 48 ./spp.x -g 0 -p 32

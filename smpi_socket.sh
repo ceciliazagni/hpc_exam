@@ -32,14 +32,12 @@ echo export OMP_NUM_THREADS=64 >> timings/smpi${SLURM_JOBID}.csv
 
 echo k,processes,time_init,time_run >> timings/smpi${SLURM_JOBID}.csv
 
-for k in 5000 10000 15000 20000
+K=10000
+mpirun -np 6 --map-by node ./main.x -i -k $k -f $pgmfilename
+wait
+for i in {1..6}
 do
-	for i in {1..6}
-	do
-		my_time_init=`mpirun -np $i --map-by socket ./main.x -i -k $k -f $pgmfilename`
-		wait
-		my_time=`mpirun -np $i --map-by socket ./main.x -r -s 0 -n 100 -f $pgmfilename`
-		echo $k,$i,$my_time_init,$my_time >> timings/smpi${SLURM_JOBID}.csv
-		make image
-	done
+	my_time=`mpirun -np $i --map-by node --bind-to socket ./main.x -r -s 0 -n 100 -f $pgmfilename`
+	echo $i,$my_time >> timings/smpi${SLURM_JOBID}.csv
+
 done
