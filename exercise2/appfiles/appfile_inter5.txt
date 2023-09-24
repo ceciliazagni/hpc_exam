@@ -1,0 +1,10 @@
+-np 1 -x UCX_RNDV_THRESH=0 -x UCX_NET_DEVICES=mlx5_1 --bind-to none --hostfile hostfiles/hostfile1 taskset -c 48 ./spp.x -g 0 -p 32
+-np 1 -x UCX_RNDV_THRESH=0 -x UCX_NET_DEVICES=mlx5_1 --bind-to none --hostfile hostfiles/hostfile2 taskset -c 48 ./spp.x -g 0 -p 32
+-np 1 -x UCX_RNDV_THRESH=0 -x UCX_NET_DEVICES=mlx5_0 --bind-to none --hostfile hostfiles/hostfile1 taskset -c 58 ./spp.x -g 1 -p 32
+-np 1 -x UCX_RNDV_THRESH=0 -x UCX_NET_DEVICES=mlx5_0 --bind-to none --hostfile hostfiles/hostfile2 taskset -c 58 ./spp.x -g 1 -p 32
+-np 1 -x UCX_RNDV_THRESH=0 -x UCX_NET_DEVICES=mlx5_3 --bind-to none --hostfile hostfiles/hostfile1 taskset -c 16 ./spp.x -g 2 -p 32
+-np 1 -x UCX_RNDV_THRESH=0 -x UCX_NET_DEVICES=mlx5_3 --bind-to none --hostfile hostfiles/hostfile2 taskset -c 16 ./spp.x -g 2 -p 32
+-np 1 -x UCX_RNDV_THRESH=0 -x UCX_NET_DEVICES=mlx5_2 --bind-to none --hostfile hostfiles/hostfile1 taskset -c 26 ./spp.x -g 3 -p 32
+-np 1 -x UCX_RNDV_THRESH=0 -x UCX_NET_DEVICES=mlx5_2 --bind-to none --hostfile hostfiles/hostfile2 taskset -c 26 ./spp.x -g 3 -p 32
+-np 1 -x UCX_RNDV_THRESH=0 -x UCX_NET_DEVICES=mlx5_7 --bind-to none --hostfile hostfiles/hostfile1 taskset -c 112 ./spp.x -g 4 -p 32
+-np 1 -x UCX_RNDV_THRESH=0 -x UCX_NET_DEVICES=mlx5_7 --bind-to none --hostfile hostfiles/hostfile2 taskset -c 112 ./spp.x -g 4 -p 32

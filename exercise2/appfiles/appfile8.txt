@@ -1,0 +1,16 @@
+-np 1 -x UCX_RNDV_THRESH=0 --bind-to none taskset -c 48 ./tpp.x -g 0 -p 32
+-np 1 -x UCX_RNDV_THRESH=0 --bind-to none taskset -c 58 ./tpp.x -g 1 -p 32
+-np 1 -x UCX_RNDV_THRESH=0 --bind-to none taskset -c 49 ./tpp.x -g 0 -p 32
+-np 1 -x UCX_RNDV_THRESH=0 --bind-to none taskset -c 59 ./tpp.x -g 1 -p 32
+-np 1 -x UCX_RNDV_THRESH=0 --bind-to none taskset -c 50 ./tpp.x -g 0 -p 32
+-np 1 -x UCX_RNDV_THRESH=0 --bind-to none taskset -c 60 ./tpp.x -g 1 -p 32
+-np 1 -x UCX_RNDV_THRESH=0 --bind-to none taskset -c 51 ./tpp.x -g 0 -p 32
+-np 1 -x UCX_RNDV_THRESH=0 --bind-to none taskset -c 61 ./tpp.x -g 1 -p 32
+-np 1 -x UCX_RNDV_THRESH=0 --bind-to none taskset -c 52 ./tpp.x -g 0 -p 32
+-np 1 -x UCX_RNDV_THRESH=0 --bind-to none taskset -c 62 ./tpp.x -g 1 -p 32
+-np 1 -x UCX_RNDV_THRESH=0 --bind-to none taskset -c 53 ./tpp.x -g 0 -p 32
+-np 1 -x UCX_RNDV_THRESH=0 --bind-to none taskset -c 63 ./tpp.x -g 1 -p 32
+-np 1 -x UCX_RNDV_THRESH=0 --bind-to none taskset -c 54 ./tpp.x -g 0 -p 32
+-np 1 -x UCX_RNDV_THRESH=0 --bind-to none taskset -c 55 ./tpp.x -g 1 -p 32
+-np 1 -x UCX_RNDV_THRESH=0 --bind-to none taskset -c 56 ./tpp.x -g 0 -p 32
+-np 1 -x UCX_RNDV_THRESH=0 --bind-to none taskset -c 57 ./tpp.x -g 1 -p 32

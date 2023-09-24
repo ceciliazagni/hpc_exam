@@ -8,8 +8,8 @@ SRCDIR=src
 SNAPDIR=snaps
 
 # Flags
-CFLAGS=-I$(INCDIR) -Wall -c -g # -fopenmp
-OBJFLAGS=-Wall -g # -fopenmp -O3 -march=native
+CFLAGS=-I$(INCDIR) -Wall -c -g  -fopenmp
+OBJFLAGS=-Wall -g  -fopenmp -O3 -march=native
 
 # Files
 OBJECTS=$(OBJDIR)/main.o $(OBJDIR)/init.o $(OBJDIR)/read_write_pgm_image.o $(OBJDIR)/run.o $(OBJDIR)/static_evolution.o $(OBJDIR)/ordered_evolution.o $(OBJDIR)/live_or_die.o
